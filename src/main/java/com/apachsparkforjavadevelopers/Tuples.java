@@ -26,8 +26,8 @@ public class Tuples {
 
         JavaRDD<Integer> originalIntegers = sc.parallelize(inputData);
         // tuple RDD
-        JavaRDD<Tuple2<Integer, Double>> sqrtRDD = originalIntegers.map(v -> new Tuple2<>(v, Math.sqrt(v)));
-        sqrtRDD.collect().forEach(System.out::println);
+        JavaRDD<Tuple2<Integer, Double>> sqrtRdd = originalIntegers.map(v -> new Tuple2<>(v, Math.sqrt(v)));
+        sqrtRdd.collect().forEach(System.out::println);
 
         sc.close();
     }
