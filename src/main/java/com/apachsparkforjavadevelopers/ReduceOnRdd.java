@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ReduceOnRDD {
+public class ReduceOnRdd {
     public static void main(String[] args) {
         List<Double> inputData = Arrays.asList(2.523, 1.234, 5.123, 0.58);
 
