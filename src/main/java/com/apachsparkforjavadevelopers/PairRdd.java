@@ -3,8 +3,6 @@ package com.apachsparkforjavadevelopers;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import scala.Tuple2;
 
@@ -27,19 +25,10 @@ public class PairRdd {
         SparkConf conf = new SparkConf().setAppName("startingSpark").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        JavaRDD<String> originalLogMessages = sc.parallelize(inputData);
-
-        JavaPairRDD<String, Long> pairRdd = originalLogMessages.mapToPair(rawString -> {
-
-            String[] columns = rawString.split(":");
-            String level = columns[0];
-
-            return new Tuple2<>(level, 1L);
-        });
-
-        JavaPairRDD<String, Long> sumsRdd = pairRdd.reduceByKey(Long::sum);
-
-        sumsRdd.foreach(tuple2 -> System.out.println(tuple2._1 + " has " + tuple2._2 + " instances"));
+        sc.parallelize(inputData)
+                .mapToPair(rawString -> (new Tuple2<>(rawString.split(":")[0], 1L)))
+                .reduceByKey(Long::sum)
+                .foreach(tuple2 -> System.out.println(tuple2._1 + " has " + tuple2._2 + " instances"));
 
         sc.close();
     }
