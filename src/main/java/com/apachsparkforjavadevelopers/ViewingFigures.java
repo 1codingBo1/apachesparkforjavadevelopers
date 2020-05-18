@@ -10,6 +10,8 @@ import scala.Tuple2;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.System.out;
+
 /**
  * This class is used in the chapter late in the course where we analyse viewing figures.
  * You can ignore until then.
@@ -17,20 +19,43 @@ import java.util.List;
 public class ViewingFigures {
     @SuppressWarnings("resource")
     public static void main(String[] args) {
-        System.setProperty("hadoop.home.dir", "c:/hadoop");
+//        System.setProperty("hadoop.home.dir", "c:/hadoop");
         Logger.getLogger("org.apache").setLevel(Level.WARN);
 
         SparkConf conf = new SparkConf().setAppName("startingSpark").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         // Use true to use hardcoded data identical to that in the PDF guide.
-        boolean testMode = true;
+        boolean testMode = false;
 
         JavaPairRDD<Integer, Integer> viewData = setUpViewDataRdd(sc, testMode);
         JavaPairRDD<Integer, Integer> chapterData = setUpChapterDataRdd(sc, testMode);
         JavaPairRDD<Integer, String> titlesData = setUpTitlesDataRdd(sc, testMode);
 
-        // TODO - over to you!
+        JavaPairRDD<Integer, Integer> chaptersPerCourse = chapterData.mapToPair(row -> new Tuple2<>(row._2, 1))
+                .reduceByKey(Integer::sum);
+
+        JavaPairRDD<Long, String> coursesRankedByViewScore = viewData.distinct()
+                .mapToPair(Tuple2::swap)
+                .join(chapterData) // ((user_id, course_id), chapter_id)
+                .mapToPair(row -> new Tuple2<>(row._2, 1L)) // ((user_id, course_id), 1)
+                .reduceByKey(Long::sum) // ((user_id, course_id), chapters_viewed)
+                .mapToPair(row -> new Tuple2<>(row._1._2, row._2)) // (course_id, chapters_viewed)
+                .join(chaptersPerCourse) // (course_id, chapters_viewed, chapters_per_course)
+                .mapValues(v -> (double) v._1 / v._2) // (course_id, share_chapters_viewed)
+                .mapValues(v -> {
+                    if (v > 0.9) return 10L;
+                    if (v > 0.5) return 4L;
+                    if (v > 0.25) return 2L;
+                    return 0L;
+                }) // (course_id, score)
+                .reduceByKey(Long::sum) // (course_id, sum_score)
+                .join(titlesData) // (course_id, (sum_score, title))
+                .mapToPair(row -> row._2) // (sum_score, title)
+                .sortByKey(false);
+
+        coursesRankedByViewScore.collect()
+                .forEach(out::println);
 
         sc.close();
     }

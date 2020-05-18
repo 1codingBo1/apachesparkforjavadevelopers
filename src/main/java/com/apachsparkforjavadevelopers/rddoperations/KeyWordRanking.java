@@ -41,9 +41,11 @@ public class KeyWordRanking {
                 .mapToPair(word -> new Tuple2<>(word, 1L))
                 .reduceByKey(Long::sum);
 
+        System.out.println(wordCountRdd.getNumPartitions());
+
         wordCountRdd.mapToPair(Tuple2::swap) // swap tuple elements to be able to use sortByKey on the count
                 .sortByKey(false)
-                .take(20)
+                .take(10)
                 .forEach(System.out::println);
     }
 
