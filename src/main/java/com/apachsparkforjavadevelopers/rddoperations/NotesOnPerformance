@@ -13,8 +13,14 @@ The subsequent stage will read the shuffle data back in (shuffle read).
 
 Caching and persistence:
 While stages can be skipped if shuffle data from the previous stage is available on disk, all narrow transformations
-will have to be executed against the data once again. Caching the data after the last transformation can avoid having to
- rerun the transformations.
+will have to be executed against the data once again. Caching the data after the last transformation can avoid having
+to rerun the transformations.
 
- Caching only works when there's enough space in memory. If there's not enough space, Spark will continue the execution
- without caching the data in memory.k
+Caching only works when there's enough space in memory. If there's not enough space, Spark will continue the execution
+without caching the data in memory. Alternatively, the persist method can be used with different storage strategies:
+MEMORY_ONLY: Same as cache method
+MEMORY_AND_DISK: If there's not enough space in memory, RDD will be persisted to disk instead
+DISK_ONLY: RDD is persisted on disk
+
+Persisting an RDD on disk comes with the overhead of having to write the data to disk. The overhead can diminish the
+time saved over re-executing the transformations.
