@@ -1,4 +1,4 @@
-package com.apachsparkforjavadevelopers;
+package com.apachsparkforjavadevelopers.rddoperations;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -16,7 +16,7 @@ import static java.lang.System.out;
  * This class is used in the chapter late in the course where we analyse viewing figures.
  * You can ignore until then.
  */
-public class ViewingFigures {
+public class BigDataBigExercise {
     @SuppressWarnings("resource")
     public static void main(String[] args) {
 //        System.setProperty("hadoop.home.dir", "c:/hadoop");
