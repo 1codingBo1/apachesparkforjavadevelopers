@@ -1,14 +1,15 @@
-package com.apachsparkforjavadevelopers.rddoperations;
+package com.apachesparkforjavadevelopers.rddoperations;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
+import scala.Tuple2;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class FlatMapsAndFilters {
+public class PairRdd {
 
     public static void main(String[] args) {
         List<String> inputData = Arrays.asList(
@@ -25,10 +26,9 @@ public class FlatMapsAndFilters {
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         sc.parallelize(inputData)
-                .flatMap(sentence -> Arrays.asList(sentence.split(" ")).iterator())
-                .filter(word -> word.matches("\\D+")) // filtering out numerals
-                .collect()
-                .forEach(System.out::println);
+                .mapToPair(rawString -> (new Tuple2<>(rawString.split(":")[0], 1L)))
+                .reduceByKey(Long::sum)
+                .foreach(tuple2 -> System.out.println(tuple2._1 + " has " + tuple2._2 + " instances"));
 
         sc.close();
     }

@@ -1,4 +1,4 @@
-package com.apachsparkforjavadevelopers.rddoperations;
+package com.apachesparkforjavadevelopers.rddoperations;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

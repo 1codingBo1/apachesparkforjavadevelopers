@@ -1,4 +1,4 @@
-package com.apachsparkforjavadevelopers.rddoperations;
+package com.apachesparkforjavadevelopers.rddoperations;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
