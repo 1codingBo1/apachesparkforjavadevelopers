@@ -1,0 +1,25 @@
+Terminology:
+Features: Variables (input)
+Label: Outcome (output)
+
+Machine Learning models are split into the two categories (1) supervised learning and (2) unsupervised learning.
+
+1 Supervised Learning
+Models that predict an outcome.
+1.1 Linear Regression
+Used when looking for an answer in a continuous range.
+
+1.2 Logistic Regression
+Used when the answer is binary.
+
+1.3 Decision Tress
+Used when the answer is in a discrete set.
+
+2 Unsupervised Learning
+Models that find relationships based on labels.
+2.1 K Means Clustering
+E.g. relationships between bought products are used to recommend another product.
+
+2.2 Matrix Factorisation
+E.g. relationships between people (i.e. similarities in their labels) who buy certain products are used to recommend
+another product.
