@@ -3,6 +3,8 @@ package com.apachesparkforjavadevelopers.ml;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.ml.evaluation.RegressionEvaluator;
+import org.apache.spark.ml.feature.OneHotEncoderEstimator;
+import org.apache.spark.ml.feature.StringIndexer;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.ml.param.ParamMap;
 import org.apache.spark.ml.regression.LinearRegression;
@@ -30,22 +32,43 @@ public class HousePriceAnalysis {
                 .option("header", true)
                 .option("inferSchema", true)
                 .csv("src/main/resources/kc_house_data.csv")
-                .drop("id", "date", "waterfront", "view", "condition",
-                        "grade", "yr_renovated", "zipcode", "lat", "long",
+                .drop("id", "date", "view", "yr_renovated", "lat", "long",
                         "sqft_lot", "sqft_lot15", "yr_built", "sqft_living15",
                         "sqft_basement")
                 .withColumn("sqft_above_share", col("sqft_above").divide(col("sqft_living")));
 
+        // create vectors for categorical columns condition, grade, and zipcode
+        // index columns
+        StringIndexer conditionIndexer = new StringIndexer()
+                .setInputCol("condition")
+                .setOutputCol("condition_index");
+        csvData = conditionIndexer.fit(csvData).transform(csvData);
+
+        StringIndexer gradeIndexer = new StringIndexer()
+                .setInputCol("grade")
+                .setOutputCol("grade_index");
+        csvData = gradeIndexer.fit(csvData).transform(csvData);
+
+        StringIndexer zipcodeIndexer = new StringIndexer()
+                .setInputCol("zipcode")
+                .setOutputCol("zipcode_index");
+        csvData = zipcodeIndexer.fit(csvData).transform(csvData);
+
+        // encode indexed columns
+        OneHotEncoderEstimator encoder = new OneHotEncoderEstimator()
+                .setInputCols(new String[]{"condition_index", "grade_index", "zipcode_index"})
+                .setOutputCols(new String[]{"condition_vector", "grade_vector", "zipcode_vector"});
+        csvData = encoder.fit(csvData).transform(csvData);
+
         VectorAssembler vectorAssembler = new VectorAssembler()
-                .setInputCols(new String[]{"bedrooms", "bathrooms", "sqft_living", "sqft_above_share", "floors"})
+                .setInputCols(new String[]{"bedrooms", "bathrooms", "sqft_living", "sqft_above_share", "floors",
+                        "condition_vector", "grade_vector", "zipcode_vector", "waterfront"})
                 .setOutputCol("features");
         Dataset<Row> csvDataWithFeatures = vectorAssembler.transform(csvData);
 
         Dataset<Row> modelInputData = csvDataWithFeatures
                 .select("price", "features")
                 .withColumnRenamed("price", "label");
-
-//        modelInputData.show(false);
 
         Dataset<Row>[] dataSplits = modelInputData.randomSplit(new double[]{0.8, 0.2});
         Dataset<Row> trainingAndTestData = dataSplits[0];
