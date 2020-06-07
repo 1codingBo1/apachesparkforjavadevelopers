@@ -15,7 +15,7 @@ public class GymCompetitors {
 
         Logger.getLogger("org.apache").setLevel(Level.WARN);
 
-        SparkSession spark = SparkSession.builder().appName("datasetBasics").master("local[*]")
+        SparkSession spark = SparkSession.builder().appName("GymCompetitors").master("local[*]")
                 .config("spark.sql.warehouse.dir", "file:///C:/Users/mheinecke/spark_tmp")
                 .getOrCreate();
 
