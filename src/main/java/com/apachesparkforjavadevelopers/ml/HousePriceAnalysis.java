@@ -108,8 +108,8 @@ public class HousePriceAnalysis {
         System.out.println("The training data r2 value is " + lrModel.summary().r2());
         System.out.println("The training data RMSE value is " + lrModel.summary().rootMeanSquaredError());
 
-        System.out.println("The test data r2 value is " + lrModel.evaluate(holdOutResults).r2());
-        System.out.println("The test data RMSE value is " + lrModel.evaluate(holdOutResults).rootMeanSquaredError());
+        System.out.println("The holdout data r2 value is " + lrModel.evaluate(holdOutResults).r2());
+        System.out.println("The holdout data RMSE value is " + lrModel.evaluate(holdOutResults).rootMeanSquaredError());
 
         System.out.println("Intercept: " + lrModel.intercept() + "; coefficient: " + lrModel.coefficients());
         System.out.println("regPram: " + lrModel.getRegParam() + "; elastic net param: " + lrModel.getElasticNetParam());
