@@ -38,7 +38,7 @@ public class CustomerChurnModel {
     public static void main(String[] args) {
         Logger.getLogger("org.apache").setLevel(Level.WARN);
 
-        SparkSession spark = SparkSession.builder().appName("HousePriceAnalysis").master("local[*]")
+        SparkSession spark = SparkSession.builder().appName("CustomerChurnModel").master("local[*]")
                 .config("spark.sql.warehouse.dir", "file:///C:/Users/mheinecke/spark_tmp")
                 .getOrCreate();
 
