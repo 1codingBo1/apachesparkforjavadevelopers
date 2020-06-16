@@ -25,37 +25,42 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
-            <version>2.4.5</version>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>2.4.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.11</artifactId>
-            <version>2.4.5</version>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>2.4.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-mllib_2.11</artifactId>
-            <version>2.4.5</version>
+            <artifactId>spark-mllib_2.12</artifactId>
+            <version>2.4.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.11</artifactId>
-            <version>2.4.5</version>
+            <artifactId>spark-streaming_2.12</artifactId>
+            <version>2.4.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
-            <version>2.4.5</version>
+            <artifactId>spark-streaming-kafka-0-10_2.12</artifactId>
+            <version>2.4.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql-kafka-0-10_2.12</artifactId>
+            <version>2.4.6</version>
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-hdfs</artifactId>
-            <version>2.7.2</version>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.13</artifactId>
+            <artifactId>kafka_2.12</artifactId>
             <version>2.5.0</version>
         </dependency>
     </dependencies>
@@ -219,6 +224,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
